@@ -15,16 +15,17 @@ public class Menu {
 	private static final  String FECHAR_PROGRAMA_OP = "O";
 	
 	private static final String OPCAO_INVALIDA_MSG = "OPÇÃO INVÁLIDA!";
-	private static final String MATRICULA_JA_CADASTRADA_MSG = "POSIÇÃO INVÁLIDA!";
+	private static final String MATRICULA_JA_CADASTRADA_MSG = "MATRÍCULA JÁ CADASTRADA!";
 	private static final String ALUNO_NAO_CADASTRADO_MSG = "Aluno não cadastrado.";
-	private static final String CADASTRO_REALIZADO_MSG = "CADASTRADO REALIZADO!";
-	
+	private static final String CADASTRO_REALIZADO_MSG = "CADASTRO REALIZADO!";
+	private static final String GRUPO_JA_CADASTRADO_MSG = "GRUPO JÁ CADASTRADO!";
+
 	/**
 	 * Scanner utilizado para ler as entradas.
 	 */
 	private Scanner sc = new Scanner(System.in);
 	
-	private Controle controle;
+	private Controle controle = new Controle();
 	
 	/**
 	 * Método main que dá início a aplicação.
@@ -54,7 +55,7 @@ public class Menu {
 				
 				System.out.print("\nOpção> ");
 		
-				opcao = sc.next();
+				opcao = sc.nextLine();
 				this.interpretaOpcao(opcao);
 			
 		}while(!opcao.equals(FECHAR_PROGRAMA_OP));
@@ -88,7 +89,7 @@ public class Menu {
 			case FECHAR_PROGRAMA_OP:
 				break;
 			default:
-				System.out.println(OPCAO_INVALIDA_MSG);
+				System.out.println(System.lineSeparator() + OPCAO_INVALIDA_MSG + System.lineSeparator());
 			}
 	}
 	
@@ -97,7 +98,7 @@ public class Menu {
 	 */
 	private void cadastrarAluno() {
 		
-		System.out.print("Matrícula: ");
+		System.out.print(System.lineSeparator() + "Matrícula: ");
 		String matricula = sc.nextLine();
 		
 		System.out.print("Nome: ");
@@ -118,17 +119,17 @@ public class Menu {
 	 * Exibe um aluno de acordo com a matrícula.
 	 */
 	private void exibirAluno() {
-		System.out.print("Matrícula: ");
+		System.out.print(System.lineSeparator() + "Matrícula: ");
 		String matricula = sc.nextLine();
 		
-		String alunoString = System.lineSeparator() + "Aluno: " + this.controle.exibirAluno(matricula);
+		String alunoString = this.controle.exibirAluno(matricula);
 		
 		
-		if(alunoString != "") {
-			System.out.println(alunoString + System.lineSeparator());
+		if(alunoString != null) {
+			System.out.println(System.lineSeparator() + "Aluno: " + alunoString + System.lineSeparator());
 		}
 		else {
-			System.out.println(ALUNO_NAO_CADASTRADO_MSG + System.lineSeparator());
+			System.out.println(System.lineSeparator() + ALUNO_NAO_CADASTRADO_MSG + System.lineSeparator());
 		}
 	}
 	
@@ -137,48 +138,53 @@ public class Menu {
 	 */
 	private void cadastrarGrupo() {
 		
-		System.out.print("Nome: ");
+		System.out.print(System.lineSeparator() + "Nome: ");
 		String nome = sc.nextLine();
 		
 		if(controle.cadastrarGrupo(nome)) {
 			System.out.println(System.lineSeparator() + CADASTRO_REALIZADO_MSG + System.lineSeparator());
 		}
 		else {
-			System.out.println(System.lineSeparator() + MATRICULA_JA_CADASTRADA_MSG + System.lineSeparator());
+			System.out.println(System.lineSeparator() + GRUPO_JA_CADASTRADO_MSG + System.lineSeparator());
 		}
 	}
 	
 	private void alocarAlunoImprimirGrupos() {
-		System.out.println("(A)locar Aluno ou (I)mprimir Grupo? ");
+		System.out.print(System.lineSeparator() + "(A)locar Aluno ou (I)mprimir Grupo? ");
 		String op = sc.nextLine();
 		
 		if(op.equals("A")) {
-			System.out.print("Matricula: ");
+			System.out.print(System.lineSeparator() + "Matricula: ");
 			String matricula = sc.nextLine();
 			
 			System.out.print("Grupo: ");
 			String grupo = sc.nextLine();
 			
-			System.out.println(controle.alocarAluno(matricula, grupo));
+			System.out.println(System.lineSeparator() + controle.alocarAluno(matricula, grupo) + System.lineSeparator());
 		}
 		else if(op.equals("I")) {
-			System.out.print("Grupo: ");
+			System.out.print(System.lineSeparator() + "Grupo: ");
 			String grupo = sc.nextLine();
 			
-			System.out.println(controle.imprimirGrupo(grupo));
+			System.out.println(controle.imprimirGrupo(grupo) + System.lineSeparator());
 		}
 	}
 	
 	private void registrarRespostas() {
-		System.out.print("Matricula: ");
+		System.out.print(System.lineSeparator() + "Matricula: ");
 		String matricula = sc.nextLine();
 		
 		System.out.println(controle.registrarResposta(matricula));
 	}
 	
 	private void imprimirAlunosQueRespondem() {
-		System.out.println("Aluno ");
-		System.out.println(controle.getAlunosQueResponderam());
+		if(controle.getAlunosQueResponderam().equals("")) {
+			System.out.println(System.lineSeparator() + "Nenhum aluno respondeu." + System.lineSeparator());
+		}
+		else {
+			System.out.println("Alunos: ");
+			System.out.println(controle.getAlunosQueResponderam() + System.lineSeparator());
+		}
 	}
 	
 }

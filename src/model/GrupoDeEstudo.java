@@ -69,7 +69,7 @@ public class GrupoDeEstudo {
 		if (tema == null) {
 			if (other.tema != null)
 				return false;
-		} else if (!tema.equals(other.tema))
+		} else if (!tema.toLowerCase().equals(other.tema.toLowerCase()))
 			return false;
 		return true;
 	}

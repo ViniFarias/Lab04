@@ -20,7 +20,7 @@ public class Controle {
 		
 		Aluno aluno = new Aluno(matricula, nome, curso);
 		
-		if(alunos.containsValue(aluno)) {
+		if(this.alunoCadastrado(matricula)) {
 			return false;
 		}
 		
@@ -36,19 +36,21 @@ public class Controle {
 			return alunos.get(matricula).toString();
 		}
 		else {
-			return "Aluno não cadastrado";			
+			return null;			
 		}
 	}
 	
 	public boolean cadastrarGrupo(String nome) {
 		
+		String keyGrupo = nome.toLowerCase();
+		
 		GrupoDeEstudo grupo = new GrupoDeEstudo(nome);
 		
-		if(grupos.containsKey(nome)) {
+		if(this.grupoCadastrado(nome)) {
 			return false;
 		}
 		
-		grupos.put(nome, grupo);
+		grupos.put(keyGrupo, grupo);
 		return true;
 	}
 	
@@ -61,7 +63,7 @@ public class Controle {
 			return "Grupo não cadastrado";
 		}
 		
-		grupos.get(grupo).alocarAluno(alunos.get(matricula));
+		grupos.get(grupo.toLowerCase()).alocarAluno(alunos.get(matricula));
 		
 		return "ALUNO ALOCADO!";
 	}
@@ -70,7 +72,8 @@ public class Controle {
 		if(!this.grupoCadastrado(grupo)) {
 			return "Grupo não cadastrado";
 		}
-		 return grupos.get(grupo).listaAlunos();
+		
+		return grupos.get(grupo.toLowerCase()).listaAlunos();
 	}
 	
 	public String registrarResposta(String matricula) {
@@ -103,11 +106,13 @@ public class Controle {
 	
 	public boolean grupoCadastrado(String grupo) {
 		
-		if(!this.validaGrupo(grupo)) {
+		String keyGrupo = grupo.toLowerCase();
+		
+		if(!this.validaGrupo(keyGrupo)) {
 			throw new IllegalArgumentException("Foi inserido algum dado nulo ou vazio.");
 		}
 		
-		return grupos.containsKey(grupo);
+		return grupos.containsKey(keyGrupo);
 	}
 	
 	public boolean validaMatricula(String matricula) {
