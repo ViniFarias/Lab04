@@ -1,9 +1,18 @@
 package main;
 
+import java.nio.channels.AlreadyConnectedException;
+import java.rmi.AlreadyBoundException;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
-import model.Controle;
+import controller.Controle;
 
+/**
+ * Classe principal do sistema.
+ * Responsável por toda interação com o usuário e exibição de menus.
+ * 
+ * @author Marcus Vinícius
+ */
 public class Menu {
 	
 	private static final  String CADASTRAR_ALUNO_OP = "C";
@@ -19,12 +28,17 @@ public class Menu {
 	private static final String ALUNO_NAO_CADASTRADO_MSG = "Aluno não cadastrado.";
 	private static final String CADASTRO_REALIZADO_MSG = "CADASTRO REALIZADO!";
 	private static final String GRUPO_JA_CADASTRADO_MSG = "GRUPO JÁ CADASTRADO!";
+	private static final String ALUNO_REGISTRADO_MSG = "ALUNO REGISTADO!";
+	private static final String ALUNO_ALOCADO_MSG = "ALUNO ALOCADO!";
 
 	/**
 	 * Scanner utilizado para ler as entradas.
 	 */
 	private Scanner sc = new Scanner(System.in);
 	
+	/**
+	 * Objeto controller do sistema.
+	 */
 	private Controle controle = new Controle();
 	
 	/**
@@ -99,7 +113,7 @@ public class Menu {
 	private void cadastrarAluno() {
 		
 		System.out.print(System.lineSeparator() + "Matrícula: ");
-		String matricula = sc.nextLine();
+		String matricula = sc.nextLine().trim();
 		
 		System.out.print("Nome: ");
 		String nome = sc.nextLine();
@@ -107,11 +121,11 @@ public class Menu {
 		System.out.print("Curso: ");
 		String curso = sc.nextLine();
 		
-		if(controle.cadastrarAluno(matricula, nome, curso)) {
+		try {
+			controle.cadastrarAluno(matricula, nome, curso);
 			System.out.println(System.lineSeparator() + CADASTRO_REALIZADO_MSG + System.lineSeparator());
-		}
-		else {
-			System.out.println(System.lineSeparator() + MATRICULA_JA_CADASTRADA_MSG + System.lineSeparator());
+		}catch(AlreadyConnectedException ace) {
+			System.out.println(System.lineSeparator() + MATRICULA_JA_CADASTRADA_MSG + System.lineSeparator());			
 		}
 	}
 	
@@ -120,16 +134,13 @@ public class Menu {
 	 */
 	private void exibirAluno() {
 		System.out.print(System.lineSeparator() + "Matrícula: ");
-		String matricula = sc.nextLine();
+		String matricula = sc.nextLine().trim();
 		
-		String alunoString = this.controle.exibirAluno(matricula);
-		
-		
-		if(alunoString != null) {
-			System.out.println(System.lineSeparator() + "Aluno: " + alunoString + System.lineSeparator());
-		}
-		else {
-			System.out.println(System.lineSeparator() + ALUNO_NAO_CADASTRADO_MSG + System.lineSeparator());
+		try {
+			String alunoString = "Aluno: " + this.controle.exibirAluno(matricula);
+			System.out.println(System.lineSeparator() + alunoString + System.lineSeparator());
+		}catch(NoSuchElementException nsee) {
+			System.out.println(System.lineSeparator() + ALUNO_NAO_CADASTRADO_MSG + System.lineSeparator());			
 		}
 	}
 	
@@ -141,49 +152,82 @@ public class Menu {
 		System.out.print(System.lineSeparator() + "Nome: ");
 		String nome = sc.nextLine();
 		
-		if(controle.cadastrarGrupo(nome)) {
-			System.out.println(System.lineSeparator() + CADASTRO_REALIZADO_MSG + System.lineSeparator());
-		}
-		else {
-			System.out.println(System.lineSeparator() + GRUPO_JA_CADASTRADO_MSG + System.lineSeparator());
+		try {
+			controle.cadastrarGrupo(nome);
+			System.out.println(CADASTRO_REALIZADO_MSG + System.lineSeparator());
+		}catch(AlreadyConnectedException ace) {
+			System.out.println(GRUPO_JA_CADASTRADO_MSG + System.lineSeparator());
+
 		}
 	}
 	
+	/**
+	 * De acordo com a opção elecionada aloca um aluno, 
+	 * ou imprime um determinado grupo.
+	 */
 	private void alocarAlunoImprimirGrupos() {
 		System.out.print(System.lineSeparator() + "(A)locar Aluno ou (I)mprimir Grupo? ");
 		String op = sc.nextLine();
-		
-		if(op.equals("A")) {
-			System.out.print(System.lineSeparator() + "Matricula: ");
-			String matricula = sc.nextLine();
 			
-			System.out.print("Grupo: ");
-			String grupo = sc.nextLine();
+		try {	
 			
-			System.out.println(System.lineSeparator() + controle.alocarAluno(matricula, grupo) + System.lineSeparator());
-		}
-		else if(op.equals("I")) {
-			System.out.print(System.lineSeparator() + "Grupo: ");
-			String grupo = sc.nextLine();
-			
-			System.out.println(controle.imprimirGrupo(grupo) + System.lineSeparator());
+			if(op.equals("A")) {
+				
+				System.out.print(System.lineSeparator() + "Matricula: ");
+				String matricula = sc.nextLine();
+					
+				System.out.print("Grupo: ");
+				String grupo = sc.nextLine();
+					
+				controle.alocarAluno(matricula, grupo);
+				System.out.println(ALUNO_ALOCADO_MSG + System.lineSeparator());
+			}
+			else if(op.equals("I")) {
+				
+				System.out.print(System.lineSeparator() + "Grupo: ");
+				String grupo = sc.nextLine();
+				
+				System.out.println(System.lineSeparator() + 
+						"Alunos do grupo " + controle.getNomeGrupo(grupo) + 
+						":" + System.lineSeparator() + 
+						controle.imprimirGrupo(grupo) + System.lineSeparator());				
+
+			}
+			else {
+				System.out.println(OPCAO_INVALIDA_MSG + System.lineSeparator());
+			}
+				
+		}catch (NoSuchElementException nsee) {
+			System.out.println(System.lineSeparator() + nsee.getMessage() + System.lineSeparator());
 		}
 	}
 	
+	/**
+	 * Registra os alunos que responderam.
+	 */
 	private void registrarRespostas() {
 		System.out.print(System.lineSeparator() + "Matricula: ");
 		String matricula = sc.nextLine();
 		
-		System.out.println(controle.registrarResposta(matricula));
+		try {
+			controle.registrarResposta(matricula);
+			System.out.println(ALUNO_REGISTRADO_MSG + System.lineSeparator());
+		}catch (NoSuchElementException nsee) {
+			System.out.println(System.lineSeparator() + nsee.getMessage() + System.lineSeparator());
+		}
 	}
 	
+	/**
+	 * Imprime os alunos que responderam às perguntas.
+	 */
 	private void imprimirAlunosQueRespondem() {
-		if(controle.getAlunosQueResponderam().equals("")) {
-			System.out.println(System.lineSeparator() + "Nenhum aluno respondeu." + System.lineSeparator());
-		}
-		else {
-			System.out.println("Alunos: ");
-			System.out.println(controle.getAlunosQueResponderam() + System.lineSeparator());
+		try {
+			String s = System.lineSeparator() + "Alunos: " + System.lineSeparator() 
+				+ controle.alunosQueResponderam();
+			
+			System.out.println(s);
+		}catch(NoSuchElementException nsee) {
+			System.out.println(System.lineSeparator() + nsee.getMessage() + System.lineSeparator());
 		}
 	}
 	

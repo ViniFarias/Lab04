@@ -3,29 +3,53 @@ package model;
 import java.util.HashSet;
 import java.util.Iterator;
 
+/**
+ * Classe que representa um grupo de estudo;
+ * 
+ * @author Marcus Vinícius
+ */
 public class GrupoDeEstudo {
-
+	
+	/**
+	 * Tema ou nome do grupo.
+	 */
 	private String tema;
+	
+	/**
+	 * Reseprenta o conjunto de alunos que um grupo possui.
+	 */
 	private HashSet<Aluno> alunos;
 	
+	/**
+	 * Construtor da classe.
+	 * 
+	 * @param tema tema ou nome do grupo.
+	 */
 	public GrupoDeEstudo(String tema) {
-		if(validaGrupoDeEstudo(tema)) {
-			this.tema = tema;
-			this.alunos = new HashSet<Aluno>();
-		}
-		else {
-			throw new IllegalArgumentException("Foi inserido algum dado nulo ou vazio.");
-		}
+		validaTema(tema);
+		
+		this.tema = tema;
+		this.alunos = new HashSet<Aluno>();
 	}
 	
-	public String getTema() {
-		return tema;
-	}
-	
+	/**
+	 * Aloca um aluno no grupo.
+	 * 
+	 * @param aluno um objeto do tipo Aluno
+	 */
 	public void alocarAluno(Aluno aluno) {
+		if(aluno == null) {
+			throw new NullPointerException("Dado nulo inserido");
+		}
+		
 		alunos.add(aluno);
 	}
 	
+	/**
+	 * Lista os alunos do grupo.
+	 * 
+	 * @return uma <code>string</code> que representa a lista de alunos do grupo.
+	 */
 	public String listaAlunos() {
 		String s = "";
 						
@@ -36,14 +60,27 @@ public class GrupoDeEstudo {
 	    return s;
 	}
 	
-	public boolean validaGrupoDeEstudo(String tema) {
-		if(tema.trim().equals("") || tema == null) {
-			return false;
+	/**
+	 * Verifica se um tema é válido.
+	 * 
+	 * @param tema tema/nome do grupo.
+	 */
+	private void validaTema(String tema) {
+		if(tema == null) {
+			throw new NullPointerException("Tema nulo");
 		}
-		
-		return true;
+		if(tema.trim().equals("")) {
+			throw new IllegalArgumentException("Tema vazio");
+		}
 	}
 	
+	public String getTema() {
+		return tema;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -52,6 +89,10 @@ public class GrupoDeEstudo {
 		result = prime * result + ((tema == null) ? 0 : tema.toLowerCase().hashCode());
 		return result;
 	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)

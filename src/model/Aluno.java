@@ -1,42 +1,80 @@
 package model;
 
+/**
+ * Classe que representa um aluno;
+ * 
+ * @author Marcus Vinícius
+ */
 public class Aluno {
 	
+	/**
+	 * Matrícula do aluno.
+	 */
 	private String matricula;
+	
+	/**
+	 * Nome do aluno.
+	 */
 	private String nome;
+	
+	/**
+	 * Curso do aluno.
+	 */
 	private String curso;
 	
+	/**
+	 * Construtor da classe.
+	 * @param matricula matrícula do aluno.
+	 * @param nome nome do aluno.
+	 * @param curso curso do aluno.
+	 */
 	public Aluno(String matricula, String nome, String curso) {
-		if(this.validaAluno(matricula, nome, curso)) {
-			this.matricula = matricula;
-			this.nome = nome;
-			this.curso = curso;
-		}
-		else {
-			throw new IllegalArgumentException("Foi inserido algum dado nulo ou vazio");
-		}
+		validaAluno(matricula, nome, curso);
 		
+		this.matricula = matricula;
+		this.nome = nome;
+		this.curso = curso;
 	}
-
+	
+	/**
+	 * Valida as informações de um aluno.
+	 * 
+	 * @param matricula matrícula do aluno.
+	 * @param nome nome do aluno.
+	 * @param curso curso do aluno.
+	 */
+	public void validaAluno(String matricula, String nome, String curso) {
+		if(matricula == null) {
+			throw new NullPointerException("Matrícula nula!");
+		}
+		if(matricula.trim().equals("")) {
+			throw new IllegalArgumentException("Matrícula vazia!");
+		}
+		if(nome == null) {
+			throw new NullPointerException("Nome nulo!");
+		}
+		if(nome.trim().equals("")) {
+			throw new IllegalArgumentException("Nome vazio!");
+		}
+		if(curso == null) {
+			throw new NullPointerException("Curso nulo!");
+		}
+		if(curso.trim().equals("")) {
+			throw new IllegalArgumentException("Curso vazio!");
+		}
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String toString() {
 		return this.matricula + " - " + this.nome + " - " + this.curso;
 	}
 	
-	public boolean validaAluno(String matricula, String nome, String curso) {
-		if(matricula.trim().equals("") || matricula == null) {
-			return false;
-		}
-		if(nome.trim().equals("") || nome == null) {
-			return false;
-		}
-		if(curso.trim().equals("") || curso == null) {
-			return false;
-		}
-		
-		return true;
-	}
-
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -44,7 +82,10 @@ public class Aluno {
 		result = prime * result + ((matricula == null) ? 0 : matricula.hashCode());
 		return result;
 	}
-
+	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
