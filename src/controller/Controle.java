@@ -76,7 +76,7 @@ public class Controle {
 	/**
 	 * Exibe um aluno cadastrado no sistema.
 	 * 
-	 * @param matricula do aluno.
+	 * @param matricula matricula do aluno.
 	 * @return uma <code>string</code> que representa o aluno.
 	 */
 	public String exibirAluno(String matricula) {

@@ -10,7 +10,6 @@ import org.junit.Test;
  * 
  * @see GrupoDeEstudo
  * @author Marcus Vinícius
- *
  */
 public class GrupoDeEstudoTest {
 	
