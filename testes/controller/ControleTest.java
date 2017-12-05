@@ -10,6 +10,13 @@ import org.junit.Test;
 
 import model.Aluno;
 
+/**
+ * Classe de testes da classe Controle.
+ * 
+ * @see Controle
+ * @author Marcus Vinícius
+ *
+ */
 public class ControleTest {
 
 	Controle controle;

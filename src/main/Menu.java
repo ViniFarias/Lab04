@@ -30,6 +30,7 @@ public class Menu {
 	private static final String GRUPO_JA_CADASTRADO_MSG = "GRUPO JÁ CADASTRADO!";
 	private static final String ALUNO_REGISTRADO_MSG = "ALUNO REGISTADO!";
 	private static final String ALUNO_ALOCADO_MSG = "ALUNO ALOCADO!";
+	private static final String ALOCAR_ALUNO_IMPRIMIR_GRUPOS_MSG = "(A)locar Aluno ou (I)mprimir Grupo? ";
 
 	/**
 	 * Scanner utilizado para ler as entradas.
@@ -69,7 +70,7 @@ public class Menu {
 				
 				System.out.print("\nOpção> ");
 		
-				opcao = sc.nextLine();
+				opcao = sc.nextLine().toUpperCase();
 				this.interpretaOpcao(opcao);
 			
 		}while(!opcao.equals(FECHAR_PROGRAMA_OP));
@@ -103,7 +104,8 @@ public class Menu {
 			case FECHAR_PROGRAMA_OP:
 				break;
 			default:
-				System.out.println(System.lineSeparator() + OPCAO_INVALIDA_MSG + System.lineSeparator());
+				System.out.println(System.lineSeparator() + OPCAO_INVALIDA_MSG 
+						+ System.lineSeparator());
 			}
 	}
 	
@@ -123,9 +125,11 @@ public class Menu {
 		
 		try {
 			controle.cadastrarAluno(matricula, nome, curso);
-			System.out.println(System.lineSeparator() + CADASTRO_REALIZADO_MSG + System.lineSeparator());
+			System.out.println(System.lineSeparator() + CADASTRO_REALIZADO_MSG 
+					+ System.lineSeparator());
 		}catch(AlreadyConnectedException ace) {
-			System.out.println(System.lineSeparator() + MATRICULA_JA_CADASTRADA_MSG + System.lineSeparator());			
+			System.out.println(System.lineSeparator() + MATRICULA_JA_CADASTRADA_MSG 
+					+ System.lineSeparator());			
 		}
 	}
 	
@@ -140,7 +144,8 @@ public class Menu {
 			String alunoString = "Aluno: " + this.controle.exibirAluno(matricula);
 			System.out.println(System.lineSeparator() + alunoString + System.lineSeparator());
 		}catch(NoSuchElementException nsee) {
-			System.out.println(System.lineSeparator() + ALUNO_NAO_CADASTRADO_MSG + System.lineSeparator());			
+			System.out.println(System.lineSeparator() + ALUNO_NAO_CADASTRADO_MSG 
+					+ System.lineSeparator());			
 		}
 	}
 	
@@ -162,11 +167,11 @@ public class Menu {
 	}
 	
 	/**
-	 * De acordo com a opção elecionada aloca um aluno, 
+	 * De acordo com a opção selecionada aloca um aluno, 
 	 * ou imprime um determinado grupo.
 	 */
 	private void alocarAlunoImprimirGrupos() {
-		System.out.print(System.lineSeparator() + "(A)locar Aluno ou (I)mprimir Grupo? ");
+		System.out.print(System.lineSeparator() + ALOCAR_ALUNO_IMPRIMIR_GRUPOS_MSG);
 		String op = sc.nextLine();
 			
 		try {	

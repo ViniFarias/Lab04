@@ -6,7 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Classe de teste da classe GrupoDeEstudo
+ * Classe de testes da classe GrupoDeEstudo.
  * 
  * @see GrupoDeEstudo
  * @author Marcus Vinícius
