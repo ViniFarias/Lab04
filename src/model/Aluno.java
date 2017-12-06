@@ -1,7 +1,7 @@
 package model;
 
 /**
- * Classe que representa um aluno;
+ * Classe que representa um aluno.
  * 
  * @author Marcus Vinícius
  */

@@ -16,7 +16,7 @@ public class GrupoDeEstudo {
 	private String tema;
 	
 	/**
-	 * Reseprenta o conjunto de alunos que um grupo possui.
+	 * Representa o conjunto de alunos que um grupo possui.
 	 */
 	private HashSet<Aluno> alunos;
 	
